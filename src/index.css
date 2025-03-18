@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+
+body {
+  font-family: sans-serif;
+  background-color: #f3f4f6;
+}
+
+/* SimpleBar Scrollbar Styling */
+.simplebar-scrollbar::before {
+  background: linear-gradient(45deg, #6b73ff, #000dff);
+  border-radius: 5px;
+  transition: transform 0.2s;
+}
+
+/* Shrinking Effect */
+.simplebar-scrollbar:active::before {
+  transform: scaleY(0.7);
+}
+
+
+
