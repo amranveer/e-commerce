@@ -8,7 +8,7 @@ const Navbar = () => {
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <nav className="bg-blue-600 text-white py-4 px-6 shadow-md ">
+    <nav className="bg-blue-600 text-white py-4 px-6 shadow-md  sticky top-0 z-10">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to="/">
           <h1 className="text-2xl font-bold">E-Commerce Platform</h1>
