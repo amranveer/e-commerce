@@ -16,7 +16,7 @@ function App() {
     <div className="h-screen w-screen overflow-hidden">
       <SimpleBar
         ref={simpleBarRef}
-        autoHide={false}
+        autoHide={true}
         forceVisible="y"
         style={{ maxHeight: "100vh", height: "100%", overflowX: "hidden" }}
       >

@@ -31,7 +31,7 @@ const FeaturedProducts = () => {
               <h3 className="text-lg font-semibold">{product.name}</h3>
               <p className="text-gray-600">₹{product.price.toFixed(2)}</p>
               <button
-                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+                className="mt-2 px-4 py-2 bg-black text-white rounded  hover:bg-gray-800 transition-colors"
                 aria-label={`Add ${product.name} to cart`}
               >
                 Add to Cart

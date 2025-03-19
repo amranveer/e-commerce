@@ -21,7 +21,7 @@ const ProductDetails = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 mb-8 mt-10">
       <button
-        className="mb-6 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+        className="mb-6 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
         onClick={() => navigate(-1)}
       >
         Go Back
@@ -38,7 +38,7 @@ const ProductDetails = () => {
           <p className="text-gray-600 mb-4">Category: {product.category}</p>
           <p className="text-2xl font-semibold mb-4">₹{product.price.toFixed(2)}</p>
           <button 
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
+            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
             onClick={handleAddToCart}
           >
             Add to Cart

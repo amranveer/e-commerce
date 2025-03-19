@@ -3,29 +3,35 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 
 const Navbar = () => {
-  const { state: { cartItems } } = useCart();
+  const {
+    state: { cartItems },
+  } = useCart();
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <nav className="bg-blue-600 text-white py-4 px-6 shadow-md  sticky top-0 z-10">
+    <nav className="bg-black text-white py-4 px-6 shadow-md sticky top-0 z-10">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
-        <Link to="/">
-          <h1 className="text-2xl font-bold">E-Commerce Platform</h1>
+        <Link to="/" className="hover:scale-105 transition-transform duration-300">
+          <h1 className="text-2xl font-bold">E-Cart</h1>
         </Link>
-        
-        <div className="flex items-center gap-6">
-          <Link to="/" className="hover:text-gray-200 transition-colors">Home</Link>
-          <Link to="/products" className="hover:text-gray-200 transition-colors">Products</Link>
-          
-          <Link to="/cart" className="relative hover:text-gray-200 transition-colors">
-            Cart
-            {totalItems > 0 && (
-              <span className="absolute -top-2 -right-3 text-sm bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center">
-                {totalItems}
-              </span>
-            )}
-          </Link>
+
+        <div className="flex items-center gap-8">
+          {['Home', 'Products', 'Cart'].map((text, index) => (
+            <Link
+              key={index}
+              to={text === 'Home' ? '/' : `/${text.toLowerCase()}`}
+              className="relative group text-white text-lg font-medium"
+            >
+              {text}
+              {text === 'Cart' && totalItems > 0 && (
+                <span className="absolute -top-2 -right-4 text-xs bg-white text-black rounded-full w-4 h-4 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+              <span className="block h-0.5 w-0 bg-white transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          ))}
         </div>
       </div>
     </nav>
