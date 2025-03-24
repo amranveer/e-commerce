@@ -2,7 +2,7 @@ import React from 'react';
 import { useCart } from '../context/CartContext';
 
 const Cart = () => {
-  const { state: { cartItems }, dispatch } = useCart();
+  const {removeFromCart ,cartItems} = useCart();
 
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -23,7 +23,7 @@ const Cart = () => {
           </div>
           <button
             className="px-4 py-2 bg-red-600 text-white rounded"
-            onClick={() => dispatch({ type: 'REMOVE_FROM_CART', payload: item.id })}
+            onClick={() => removeFromCart(item.id)}
           >
             Remove
           </button>

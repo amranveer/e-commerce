@@ -6,7 +6,7 @@ import products from '../data/products';
 const ProductDetails = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
-  const { dispatch } = useCart();
+  const {addToCart} = useCart();
 
   const product = products.find((prod) => prod.id === parseInt(productId));
 
@@ -14,9 +14,7 @@ const ProductDetails = () => {
     return <div className="text-center text-red-600 text-xl mt-10">Product Not Found</div>;
   }
 
-  const handleAddToCart = () => {
-    dispatch({ type: 'ADD_TO_CART', payload: product });
-  };
+  
 
   return (
     <div className="max-w-4xl mx-auto px-4 mb-8 mt-10">
@@ -39,7 +37,7 @@ const ProductDetails = () => {
           <p className="text-2xl font-semibold mb-4">₹{product.price.toFixed(2)}</p>
           <button 
             className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
-            onClick={handleAddToCart}
+            onClick={ () =>addToCart(product)}
           >
             Add to Cart
           </button>

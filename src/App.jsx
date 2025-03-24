@@ -8,6 +8,9 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Navbar from "./components/Navbar";
+import { ProtectedRoutes } from "./routes/ProtectedRoutes";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   const simpleBarRef = useRef(null);
@@ -21,13 +24,48 @@ function App() {
         style={{ maxHeight: "100vh", height: "100%", overflowX: "hidden" }}
       >
         <Router>
-          <Navbar/>
+    
+          
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path = "/login" element = {<Login/>}/>
+            <Route path = "/register" element = {<Register/>}/>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoutes>
+                  <Navbar/>
+                  <Home />
+                </ProtectedRoutes>
+              }
+            />
 
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:productId" element={<ProductDetails/>} />
-            <Route path="/cart" element={<Cart/>} />
+            <Route
+              path="/products"
+              element={
+                <ProtectedRoutes>
+                  <Navbar/>
+                  <Products />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/products/:productId"
+              element={
+                <ProtectedRoutes>
+                  <Navbar/>
+                  <ProductDetails />
+                </ProtectedRoutes>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoutes>
+                  <Navbar/>
+                  <Cart />
+                </ProtectedRoutes>
+              }
+            />
           </Routes>
         </Router>
       </SimpleBar>

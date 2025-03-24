@@ -74,10 +74,10 @@ const Products = () => {
       {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         {paginatedProducts.map((product) => (
-          <Link to={`/products/${product.id}`}>
+          <Link to={`/products/${product.id}`} key={product.id} >
 
           <div 
-            key={product.id} 
+            
             className="bg-white p-4 rounded-xl shadow hover:shadow-lg transition-shadow"
           >
             <div 
