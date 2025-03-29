@@ -1,7 +1,7 @@
 import {create} from "zustand"
 import axios from "axios"
 
-const API_URL = "https://e-cart-server-jdi8.onrender.com/api/auth"
+const API_URL = "https://e-cart-server-852d.onrender.com"
 axios.defaults.withCredentials = true;
 
 
