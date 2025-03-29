@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import products from '../data/products';
-
+import {motion} from 'framer-motion'
 const ProductDetails = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -17,7 +17,11 @@ const ProductDetails = () => {
   
 
   return (
-    <div className="max-w-4xl mx-auto px-4 mb-8 mt-10">
+    <motion.div
+     initial={{opacity:0, }}
+     animate={{opacity:1 , }}
+     transition={{duration:0.5,  }}
+    className="max-w-4xl mx-auto px-4 mb-8 mt-10">
       <button
         className="mb-6 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
         onClick={() => navigate(-1)}
@@ -36,14 +40,14 @@ const ProductDetails = () => {
           <p className="text-gray-600 mb-4">Category: {product.category}</p>
           <p className="text-2xl font-semibold mb-4">₹{product.price.toFixed(2)}</p>
           <button 
-            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
+            className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors cursor-pointer"
             onClick={ () =>addToCart(product)}
           >
             Add to Cart
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

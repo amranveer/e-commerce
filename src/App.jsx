@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import Home from "./pages/Home";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import "./index.css";
@@ -8,13 +8,46 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Navbar from "./components/Navbar";
-import { ProtectedRoutes } from "./routes/ProtectedRoutes";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-
+import Login from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import EmailVerificationPage from "./pages/EmailVerificationPage";
+import {Toaster} from 'react-hot-toast';
+import { useAuthStore } from "./store/authstore";
+import ProfilePage from "./pages/ProfilePage";
 function App() {
   const simpleBarRef = useRef(null);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const user = useAuthStore((state) => state.user);
+  const checkAuth = useAuthStore((state) => state.checkAuth);
+  
+  
+  const ProtectedRoutes = ({children}) => {
+    if(!isAuthenticated){
+      return <Navigate to="/login" replace/>
+    }
+    if(!user.isVerified){
+      return <Navigate to ="/verify-email" replace />
+     }
 
+     return children
+
+  }
+
+  const RedirectAuthenticatedUser = ({children}) =>{
+    const {isAuthenticated, user} = useAuthStore();
+    if(isAuthenticated && user.isVerified){
+      return <Navigate to="/" replace />
+              
+    }
+    return children
+    }
+
+  useEffect(()=>{
+       checkAuth()
+  },[checkAuth])
+
+  console.log('isauthenitcated', isAuthenticated)
+  console.log('user', user)
   return (
     <div className="h-screen w-screen overflow-hidden">
       <SimpleBar
@@ -22,13 +55,23 @@ function App() {
         autoHide={true}
         forceVisible="y"
         style={{ maxHeight: "100vh", height: "100%", overflowX: "hidden" }}
-      >
-        <Router>
-    
-          
+      >  
           <Routes>
-            <Route path = "/login" element = {<Login/>}/>
-            <Route path = "/register" element = {<Register/>}/>
+            <Route path = "/login" element = {
+              <RedirectAuthenticatedUser>
+
+                <Login/>
+              </RedirectAuthenticatedUser>
+              
+              }/>
+            <Route path = "/signup" element = {
+              <RedirectAuthenticatedUser>
+
+                <SignUpPage/>
+              </RedirectAuthenticatedUser>
+              
+              }/>
+            <Route path = "/verify-email" element = {<EmailVerificationPage/>}/>
             <Route
               path="/"
               element={
@@ -66,8 +109,18 @@ function App() {
                 </ProtectedRoutes>
               }
             />
+             <Route
+              path="/profile"
+              element={
+                <ProtectedRoutes>
+                  <Navbar/>
+                   <ProfilePage/>
+                </ProtectedRoutes>
+              }
+            />
           </Routes>
-        </Router>
+          <Toaster/>
+        
       </SimpleBar>
     </div>
   );

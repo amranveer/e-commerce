@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import products from '../data/products';
 import { Link } from 'react-router-dom'
+import {motion} from 'framer-motion'
+
 
 const Products = () => {
     
@@ -33,7 +35,10 @@ const Products = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 mb-8 min-h-screen mt-4">
+    <motion.div
+    initial={{ opacity: 0,  }}
+    animate={{ opacity: 1, }}
+    transition={{ duration: 0.5 }} className="max-w-7xl mx-auto px-4 mb-8 min-h-screen mt-4">
       <h2 className="text-3xl font-bold mb-6">All Products</h2>
 
       {/* Filter & Search Controls */}
@@ -116,7 +121,7 @@ const Products = () => {
           Next
         </button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
