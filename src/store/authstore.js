@@ -2,7 +2,6 @@ import {create} from "zustand"
 import axios from "axios"
 
 const API_URL = "https://e-cart-server-852d.onrender.com/api/auth"
-axios.defaults.withCredentials = true;
 
 
 export const useAuthStore = create((set) => ({
@@ -15,7 +14,9 @@ export const useAuthStore = create((set) => ({
     signup: async(email, password,name) =>{
        set({isLoading:true, error:null});
        try {
-          const response = await axios.post(`${API_URL}/signup`,{email,password,name})
+          const response = await axios.post(`${API_URL}/signup`,{email,password,name},{
+            withCredentials:true,
+        })
           set({user:response.data.user, isAuthenticated:true,isLoading:false});
        } catch (error) {
         set({error:error.response.data.message || "Error signing up", isLoading:false})
@@ -26,7 +27,9 @@ export const useAuthStore = create((set) => ({
     verifyEmail: async (code) =>{
         set({isLoading:true, error:null})
         try{
-            const response = await axios.post(`${API_URL}/verify-email`,{code})
+            const response = await axios.post(`${API_URL}/verify-email`,{code},{
+                withCredentials:true,
+            })
             set({user:response.data.user,isAuthenticated:true, isLoading:false})
             return response.data
         } catch(error){
@@ -63,7 +66,9 @@ export const useAuthStore = create((set) => ({
     logout: async () => {
         set({isLoading:true, error:null})
         try {
-            const response = await axios.post(`${API_URL}/logout`)
+            const response = await axios.post(`${API_URL}/logout`,{
+                withCredentials:true,
+            })
             set({user:null, isAuthenticated:false, isLoading:false})
           
         } catch (error) {
