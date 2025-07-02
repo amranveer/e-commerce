@@ -20,20 +20,28 @@ const cartSlice = createSlice({
       }
     },
 
-    removeFromCart: (state, action) => {
+    increaseQuantity: (state, action) => {
       const id = action.payload;
-      state.items = state.items.filter(item => item._id !== id);
+      const item = state.items.find(item => item._id === id);
+      if (item) {
+        item.quantity += 1;
+      }
     },
 
     decreaseQuantity: (state, action) => {
       const id = action.payload;
-      const existingItem = state.items.find(item => item._id === id);
-      if (existingItem) {
-        existingItem.quantity -= 1;
-        if (existingItem.quantity <= 0) {
+      const item = state.items.find(item => item._id === id);
+      if (item) {
+        item.quantity -= 1;
+        if (item.quantity <= 0) {
           state.items = state.items.filter(item => item._id !== id);
         }
       }
+    },
+
+    removeFromCart: (state, action) => {
+      const id = action.payload;
+      state.items = state.items.filter(item => item._id !== id);
     },
 
     clearCart: (state) => {
@@ -42,7 +50,7 @@ const cartSlice = createSlice({
   },
 });
 
-// Inline Selectors (use these in components)
+// Selectors
 export const selectCartItems = (state) => state.cart.items;
 
 export const selectTotalQuantity = (state) =>
@@ -54,8 +62,9 @@ export const selectTotalPrice = (state) =>
 // Export actions and reducer
 export const {
   addToCart,
-  removeFromCart,
+  increaseQuantity,
   decreaseQuantity,
+  removeFromCart,
   clearCart,
 } = cartSlice.actions;
 
