@@ -1,7 +1,7 @@
 import {create} from "zustand"
 import axios from "axios"
 
-const API_URL = "https://e-cart-server-852d.onrender.com/api/auth"
+const API_URL = import.meta.env.VITE_API_URL
 
 
 export const useAuthStore = create((set) => ({
@@ -41,7 +41,7 @@ export const useAuthStore = create((set) => ({
     checkAuth: async() =>{
         set({isCheckingAuth:true, error:null})
         try {
-            const response = await axios.get(`${API_URL}/check-auth`,{
+            const response = await axios.get(`${API_URL}/api/auth/check-auth`,{
                 withCredentials:true,
             });
             set({user:response.data.user, isAuthenticated:true, isCheckingAuth:false})
@@ -53,7 +53,7 @@ export const useAuthStore = create((set) => ({
     login: async (email,password) =>{
         set({isLoading:true, error:null})
         try {
-            const response = await axios.post(`${API_URL}/login`,{email,password} ,{
+            const response = await axios.post(`${API_URL}/api/auth/login`,{email,password} ,{
                 withCredentials:true,
             })
             set({user:response.data.user, isAuthenticated:true, isLoading:false})

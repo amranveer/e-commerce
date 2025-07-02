@@ -4,11 +4,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Mail, Lock, Loader } from "lucide-react";
 import Input from "../components/Input";
-import { useAuthStore } from "../store/authstore";
 
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/thunks/authThunks";
 const LoginPage = () => {
-  const { error, isLoading, login } = useAuthStore();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const { isLoading, error } = useSelector((state) => state.auth);
 
   // ✅ Validation Schema
   const validationSchema = Yup.object({
@@ -20,19 +23,17 @@ const LoginPage = () => {
       .required("Password is required"),
   });
 
-  
-
   // ✅ Formik Hook
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema,
     onSubmit: async (values) => {
-      
       try {
-        await login(values.email, values.password);
-        navigate('/')
+        await dispatch(login({ email: values.email, password: values.password })).unwrap();
+        navigate('/');
       } catch (err) {
-        console.error(`Error while verifying user: ${err}`);
+        console.error(`Error while logging in: ${err}`);
+        // Optionally show toast or notification here
       }
     },
   });
@@ -50,9 +51,8 @@ const LoginPage = () => {
             Welcome Back
           </h2>
 
-          {/* ✅ Formik Form */}
           <form onSubmit={formik.handleSubmit}>
-            {/* Email Input */}
+            {/* Email */}
             <Input
               icon={Mail}
               type="email"
@@ -66,7 +66,7 @@ const LoginPage = () => {
               <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
             )}
 
-            {/* Password Input */}
+            {/* Password */}
             <Input
               icon={Lock}
               type="password"
@@ -80,14 +80,14 @@ const LoginPage = () => {
               <p className="text-red-500 text-sm mt-1">{formik.errors.password}</p>
             )}
 
-            {/* Forgot Password Link */}
+            {/* Forgot Password */}
             <div className="flex items-center mb-6 mt-2">
               <Link to="/forgot-password" className="text-sm text-gray-100 hover:underline">
                 Forgot password?
               </Link>
             </div>
 
-            {/* ✅ Backend Error Message (Authentication Error) */}
+            {/* Error from Redux */}
             {error && (
               <motion.p
                 initial={{ opacity: 0, y: -10 }}
@@ -101,7 +101,6 @@ const LoginPage = () => {
 
             {/* Submit Button */}
             <motion.button
-          
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full py-3 px-4 bg-white text-gray-800 font-bold rounded-lg shadow-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
@@ -113,6 +112,7 @@ const LoginPage = () => {
           </form>
         </div>
 
+        {/* Sign Up Link */}
         <div className="px-8 mb-4 py-4 bg-gray-800 bg-opacity-50 flex justify-center">
           <p className="text-sm text-gray-400">
             Don't have an account?{" "}

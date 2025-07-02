@@ -1,17 +1,22 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
-import { useCart } from "../context/CartContext";
+import { removeFromCart } from "../redux/slices/cartSlice";
+
+// ✅ Inline selector instead of separate file
+const selectCartItems = (state) => state.cart.items;
 
 const Cart = () => {
-  const { removeFromCart, cartItems } = useCart();
+  const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItems);
   const [removingItem, setRemovingItem] = useState(null);
 
   const handleRemove = (id) => {
-    setRemovingItem(id); // Mark item for removal
+    setRemovingItem(id);
     setTimeout(() => {
-      removeFromCart(id); // Actually remove after animation
+      dispatch(removeFromCart(id));
       setRemovingItem(null);
-    }, 200); // Same as exit animation duration
+    }, 200);
   };
 
   const totalPrice = cartItems.reduce(
@@ -29,11 +34,10 @@ const Cart = () => {
     >
       <h1 className="text-3xl font-bold mb-6">Your Cart</h1>
 
-      {/* AnimatePresence ensures smooth removal */}
       <AnimatePresence>
         {cartItems.map((item) => (
           <motion.div
-            key={item.id}
+            key={item._id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, x: -50 }}
@@ -47,8 +51,8 @@ const Cart = () => {
             </div>
             <button
               className="px-4 py-2 bg-red-600 text-white rounded cursor-pointer"
-              onClick={() => handleRemove(item.id)}
-              disabled={removingItem === item.id} // Prevent spamming clicks
+              onClick={() => handleRemove(item._id)}
+              disabled={removingItem === item._id}
             >
               Remove
             </button>
@@ -56,7 +60,6 @@ const Cart = () => {
         ))}
       </AnimatePresence>
 
-      {/* Smooth transition when cart becomes empty */}
       <AnimatePresence>
         {cartItems.length === 0 && (
           <motion.div
