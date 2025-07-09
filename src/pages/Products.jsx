@@ -3,7 +3,12 @@ import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/slices/productSlice';
-import { addToCart, increaseQuantity, decreaseQuantity } from '../redux/slices/cartSlice';
+import {
+  addToCart,
+  increaseQuantity,
+  decreaseQuantity,
+  saveCartToBackend,
+} from '../redux/slices/cartSlice';
 
 const CustomDropdown = ({ label, value, onChange, options }) => {
   const [open, setOpen] = useState(false);
@@ -87,6 +92,21 @@ const Products = () => {
     setSearchParams(params);
   }, [category, sortOrder, searchQuery]);
 
+  const handleAddToCart = (product) => {
+    dispatch(addToCart(product));
+    dispatch(saveCartToBackend());
+  };
+
+  const handleIncrease = (id) => {
+    dispatch(increaseQuantity(id));
+    dispatch(saveCartToBackend());
+  };
+
+  const handleDecrease = (id) => {
+    dispatch(decreaseQuantity(id));
+    dispatch(saveCartToBackend());
+  };
+
   const filtered = products.filter((product) => {
     const matchCategory = category === 'All' || product.category === category;
     const matchSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
@@ -169,14 +189,14 @@ const Products = () => {
               {cartItem ? (
                 <div className="flex items-center gap-2 mt-3">
                   <button
-                    onClick={() => dispatch(decreaseQuantity(product._id))}
+                    onClick={() => handleDecrease(product._id)}
                     className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                   >
                     −
                   </button>
                   <span>{cartItem.quantity}</span>
                   <button
-                    onClick={() => dispatch(increaseQuantity(product._id))}
+                    onClick={() => handleIncrease(product._id)}
                     className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                   >
                     +
@@ -185,7 +205,7 @@ const Products = () => {
               ) : (
                 <button
                   className="mt-2 px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition-colors"
-                  onClick={() => dispatch(addToCart(product))}
+                  onClick={() => handleAddToCart(product)}
                 >
                   Add to Cart
                 </button>

@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   increaseQuantity,
   decreaseQuantity,
-  removeFromCart
+  removeFromCart,
+  saveCartToBackend,
 } from '../redux/slices/cartSlice';
 import { Link } from 'react-router-dom';
 
@@ -31,11 +32,27 @@ const CartSidebar = ({ isOpen, onClose }) => {
     };
   }, [isOpen, onClose]);
 
+  // Handlers that sync with backend
+  const handleIncrease = (id) => {
+    dispatch(increaseQuantity(id));
+    dispatch(saveCartToBackend());
+  };
+
+  const handleDecrease = (id) => {
+    dispatch(decreaseQuantity(id));
+    dispatch(saveCartToBackend());
+  };
+
+  const handleRemove = (id) => {
+    dispatch(removeFromCart(id));
+    dispatch(saveCartToBackend());
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Soft dimmed blurred background */}
+          {/* Backdrop */}
           <motion.div
             className="fixed inset-0 bg-black/10 backdrop-blur-sm z-40"
             initial={{ opacity: 0 }}
@@ -43,7 +60,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
             exit={{ opacity: 0 }}
           />
 
-          {/* Sidebar modal */}
+          {/* Sidebar */}
           <motion.div
             ref={modalRef}
             initial={{ x: '100%' }}
@@ -72,14 +89,14 @@ const CartSidebar = ({ isOpen, onClose }) => {
 
                         <div className="flex items-center gap-2">
                           <button
-                            onClick={() => dispatch(decreaseQuantity(item._id))}
+                            onClick={() => handleDecrease(item._id)}
                             className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                           >
                             −
                           </button>
                           <span>{item.quantity}</span>
                           <button
-                            onClick={() => dispatch(increaseQuantity(item._id))}
+                            onClick={() => handleIncrease(item._id)}
                             className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300"
                           >
                             +
@@ -89,7 +106,7 @@ const CartSidebar = ({ isOpen, onClose }) => {
 
                       <div
                         className="text-sm text-right text-red-500 cursor-pointer mt-1 hover:underline"
-                        onClick={() => dispatch(removeFromCart(item._id))}
+                        onClick={() => handleRemove(item._id)}
                       >
                         Remove
                       </div>

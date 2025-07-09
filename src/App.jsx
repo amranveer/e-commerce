@@ -11,8 +11,8 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Navbar from "./components/Navbar";
 import Login from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
-import EmailVerificationPage from "./pages/EmailVerificationPage";
+// import SignUpPage from "./pages/SignUpPage";
+// import EmailVerificationPage from "./pages/EmailVerificationPage";
 import ProfilePage from "./pages/ProfilePage";
 import { Toaster } from "react-hot-toast";
 import { checkAuth } from "./redux/thunks/authThunks";
@@ -62,34 +62,34 @@ function App() {
               </RedirectAuthenticatedUser>
             }
           />
-          <Route
+          {/* <Route
             path="/signup"
             element={
               <RedirectAuthenticatedUser>
                 <SignUpPage />
               </RedirectAuthenticatedUser>
             }
-          />
-          <Route path="/verify-email" element={<EmailVerificationPage />} />
+          /> */}
+          {/* <Route path="/verify-email" element={<EmailVerificationPage />} /> */}
 
           {/* Protected Routes */}
           <Route
             path="/"
             element={
-              <ProtectedRoutes>
+              <>
                 <Navbar />
                 <Home />
-              </ProtectedRoutes>
+              </>
             }
           />
 
           <Route
             path="/products"
             element={
-              <ProtectedRoutes>
+              <>
                 <Navbar />
                 <Products />
-              </ProtectedRoutes>
+              </>
             }
           />
 
@@ -105,10 +105,10 @@ function App() {
           <Route
             path="/products/:productId"
             element={
-              <ProtectedRoutes>
+              <>
                 <Navbar />
                 <ProductDetails />
-              </ProtectedRoutes>
+              </>
             }
           />
           <Route

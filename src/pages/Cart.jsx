@@ -5,6 +5,7 @@ import {
   removeFromCart,
   increaseQuantity,
   decreaseQuantity,
+  saveCartToBackend,
 } from "../redux/slices/cartSlice";
 
 const Cart = () => {
@@ -15,6 +16,11 @@ const Cart = () => {
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const handleCartAction = (action, id) => {
+    dispatch(action(id));
+    dispatch(saveCartToBackend());
+  };
 
   return (
     <motion.div
@@ -54,26 +60,24 @@ const Cart = () => {
 
               {/* Quantity & Actions */}
               <div className="flex flex-col sm:flex-row items-center gap-4">
-                {/* Quantity Buttons */}
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => dispatch(decreaseQuantity(item._id))}
+                    onClick={() => handleCartAction(decreaseQuantity, item._id)}
                     className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
                   >
                     −
                   </button>
                   <span className="font-medium">{item.quantity}</span>
                   <button
-                    onClick={() => dispatch(increaseQuantity(item._id))}
+                    onClick={() => handleCartAction(increaseQuantity, item._id)}
                     className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
                   >
                     +
                   </button>
                 </div>
 
-                {/* Remove Button */}
                 <button
-                  onClick={() => dispatch(removeFromCart(item._id))}
+                  onClick={() => handleCartAction(removeFromCart, item._id)}
                   className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
                 >
                   Remove
@@ -94,7 +98,6 @@ const Cart = () => {
         )}
       </AnimatePresence>
 
-      {/* Total Price */}
       {cartItems.length > 0 && (
         <div className="text-right mt-8 text-2xl font-bold">
           Total: ₹{totalPrice.toFixed(2)}
